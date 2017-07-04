@@ -1,2 +1,2 @@
 # MDN
-Mixture Density Network for predicting timeseries
+Mixture Density Network for predicting timeseries with tensorflow
