@@ -5,6 +5,7 @@ import tensorflow as tf
 from Neurocat import Loading
 from Neurocat import im2col
 
+from scipy.io import wavfile
 
 # activation function
 def activation(inp):
@@ -60,10 +61,16 @@ layer = [pasHor] \
 std_dev = 0.5
 
 # num of samples that should be generated
-gen_epoch = 2500
+gen_epoch = 20000 # 2500
 
 # choose the training data (zerocentered)
-data = np.float32(np.loadtxt("./examples/sinus.txt")[None, :])
+# data = np.float32(np.loadtxt("./examples/sinus.txt")[None, :])
+# data = np.float32(np.loadtxt("./examples/drum.txt")[None, :])
+rate, data = wavfile.read('/home/src/QK/evoplast/ep1.wav')
+data = np.float32(data)
+data = np.atleast_2d(data)/np.max(np.abs(data))
+print("data", data.shape)
+# sys.exit()
 
 # timeembedding of the data
 x_data = im2col(data[:, :-futHor], (1, pasHor), 1).T
@@ -170,6 +177,8 @@ with tf.Session() as sess:
         # update visual loading
         loader.loading(i)
 
+        print("Loss[%d] = %s" % (i, loss[i]))
+
     # generate input
     x_gen = x_data[0][None, :]
     # generate prediction
@@ -212,6 +221,7 @@ error = np.subtract(data[:, :prediction.shape[1]],
 fig = plt.figure(1)
 ax1 = fig.add_subplot(311)
 ax1.plot(loss, 'r-')
+ax1.set_yscale('log')
 ax1.set_title("errorrate MDN")
 ax1.grid(True)
 ax2 = fig.add_subplot(312)

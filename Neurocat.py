@@ -16,9 +16,9 @@ class Loading:
     def loading(self, counter):
         if self.lastepoch != 79 * counter // self.nepoch:
             self.lastepoch = 79 * counter // self.nepoch
-            sys.stdout.write("\r" +
-                             "█" * self.lastepoch +
-                             "▒" * (79 - self.lastepoch))
+            sys.stdout.write("\r" + 
+                             " " * self.lastepoch +
+                             " " * (79 - self.lastepoch))
             sys.stdout.flush()
 
     def treshold(self):
